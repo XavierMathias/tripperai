@@ -1,4 +1,4 @@
-package controller;
+package com.example.trip.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

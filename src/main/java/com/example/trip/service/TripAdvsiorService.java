@@ -1,4 +1,4 @@
-package service;
+package com.example.trip.service;
 
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
