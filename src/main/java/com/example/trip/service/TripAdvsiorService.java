@@ -13,32 +13,35 @@ import java.util.Arrays;
 public class TripAdvsiorService {
 
     @Value("${advisor.api.key}")
-    private String apiKey;
+    private String apiKey = "AC36F2D3EE3A473ABABED0ACA21906FB";
     @Value("${advisor.api.url}")
     private String apiUrl;
 
-
-    //TODO: Finish testing this method on Postman
-    private String getActivities(String location) throws IOException {
-
-        String locationName = locationSplitter(location);
+    public String getActivities(String location) throws IOException {
+        System.out.println("now in getActivities method");
+        //String locationName = locationSplitter(location);
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.content.tripadvisor.com/api/v1/location/search?key="+apiKey+"&searchQuery="+ locationName+"&language=en")
+                .url("https://api.content.tripadvisor.com/api/v1/location/search?key="+apiKey+"&searchQuery="+location+"&language=en")
                 .get()
                 .addHeader("accept", "application/json")
+                .addHeader("Referer", "http://tripper.ltd/")
                 .build();
 
-        Response response = client.newCall(request).execute();
 
-        if (response.isSuccessful()) {
-            String jsonStringResponse = response.body().string(); // storing JSON string
 
-            return jsonStringResponse;
-        } else {
-            throw new IOException("Error just came up: " + response.code());
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String jsonResponse = response.body().string(); // storing JSON string
+                System.out.println("Here is the json response " + jsonResponse);
+
+                return jsonResponse;
+            } else {
+                throw new IOException("Error just came up: " + response.code());
+            }
         }
+
     }
 
     private String locationSplitter(String location){
