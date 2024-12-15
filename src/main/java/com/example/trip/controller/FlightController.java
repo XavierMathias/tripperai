@@ -36,6 +36,7 @@ public class FlightController {
         this.objectMapper = objectMapper;
     }
 
+    // return only
     @GetMapping("/locations")
     public String getLocations(@RequestParam String keyword) {
 
@@ -53,6 +54,21 @@ public class FlightController {
             e.printStackTrace();
             return "{\"error\":\"Unable to fetch locations\"}";
         }
+    }
+
+    // TODO: Make it return a list of flight offers from the FlightOfferSearch[]
+    @GetMapping("/flights")
+    public String getFlightOffers(
+            @RequestParam (required = true) String originLocation,
+            @RequestParam (required = true) String destinationLocation,
+            @RequestParam (required = true) String departureDate,
+            @RequestParam (required = false) String returnDate,
+            @RequestParam (required = true) int adultsNum){
+
+
+
+
+        return null;
     }
 
 
