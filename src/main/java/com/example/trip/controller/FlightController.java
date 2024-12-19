@@ -2,6 +2,7 @@ package com.example.trip.controller;
 
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Location;
+import com.example.trip.dto.LocationsDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/flightapi")
@@ -43,13 +46,23 @@ public class FlightController {
         try {
             // Fetch locations
             Location[] locations = amadeusConnect.location(keyword);
-
-            ArrayList<Location> locationArray = new ArrayList<>(Arrays.asList(locations));
-            for (Location location : locationArray) {
-                sb.append(location.toString()).append("\n");
+            List<LocationsDTO> locationsDTOList = new ArrayList<>();
+            for (Location location : locations) {
+                locationsDTOList.add(new LocationsDTO(
+                        location.getAddress(),
+                        location.getAnalytics(),
+                        location.getDistance(),
+                        location.getGeoCode(),
+                        location.getDetailedName(),
+                        location.getIataCode(),
+                        location.getName(),
+                        location.getSubType(),
+                        location.getTimeZoneOffset(),
+                        location.getType()
+                ));
             }
 
-            return sb.toString();
+            return locationsDTOList.stream().map(Object::toString).collect(Collectors.joining("\n"));
         } catch (Exception e) {
             e.printStackTrace();
             return "{\"error\":\"Unable to fetch locations\"}";
