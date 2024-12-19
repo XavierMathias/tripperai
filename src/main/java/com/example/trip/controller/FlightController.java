@@ -1,6 +1,7 @@
 package com.example.trip.controller;
 
 import com.amadeus.exceptions.ResponseException;
+import com.amadeus.resources.FlightOfferSearch;
 import com.amadeus.resources.Location;
 import com.example.trip.dto.LocationsDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +40,7 @@ public class FlightController {
         this.objectMapper = objectMapper;
     }
 
-    // return only
+    // This will be used for a dropdown menu on form on frontend
     @GetMapping("/locations")
     public String getLocations(@RequestParam String keyword) {
 
@@ -69,19 +70,19 @@ public class FlightController {
         }
     }
 
-    // TODO: Make it return a list of flight offers from the FlightOfferSearch[]
+    // This will show up as different boxes after the submission is sent
     @GetMapping("/flights")
     public String getFlightOffers(
             @RequestParam (required = true) String originLocation,
             @RequestParam (required = true) String destinationLocation,
             @RequestParam (required = true) String departureDate,
             @RequestParam (required = false) String returnDate,
-            @RequestParam (required = true) int adultsNum){
+            @RequestParam (required = true) String adultsNum) throws ResponseException {
 
+        FlightOfferSearch[] flightOfferSearches = amadeusConnect.getFlightOffers(originLocation, destinationLocation, departureDate, adultsNum, returnDate);
+        List<FlightOfferSearch> flightOfferSearchList = new ArrayList<>(Arrays.asList(flightOfferSearches));
 
-
-
-        return null;
+        return flightOfferSearchList.stream().map(Object::toString).collect(Collectors.joining("\n"));
     }
 
 

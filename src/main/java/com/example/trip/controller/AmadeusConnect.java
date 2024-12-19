@@ -39,7 +39,7 @@ public class AmadeusConnect {
     }
 
     //
-    public FlightOfferSearch[] flightOffers(String origin, String destination, String departDate, String adults, String returnDate) throws ResponseException{
+    public FlightOfferSearch[] getFlightOffers(String origin, String destination, String departDate, String adults, String returnDate) throws ResponseException{
         return amadeus.shopping.flightOffersSearch.get(
                 Params.with("originLocationCode", origin)
                         .and("destinationLocationCode", destination)
